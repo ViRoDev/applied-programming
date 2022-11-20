@@ -13,4 +13,13 @@ all_words = text.downcase
                 .gsub(/[^(a-z)\s']/, ' ')
                 .split(/\s/)
                 .filter { |str| !str.empty? }
-print(all_words)
+hash = {}
+all_words.each do |word|
+  hash[word] = hash[word] ? hash[word] + 1 : 1
+end
+
+sorted = hash.sort { |a, b| b[1] <=> a[1] }
+
+[0, 1, 2].each do |idx|
+  print "NUMBER##{idx + 1} WORD IS... #{sorted[idx][0]}!\n"
+end
