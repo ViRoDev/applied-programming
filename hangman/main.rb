@@ -13,9 +13,35 @@ def select_word
     return word
 end
 
+def is_letter(symbol)
+   symbol.downcase.match(/[a-z]/)
+end
+
 def hangman
     word = select_word
     puts word
+
+    # Game state
+    parts_of_hangman_drawn = 0
+    guessed_letters = []
+
+    loop do
+        puts render_word(word, guessed_letters)
+        letter = gets.chomp
+        guessed_letters.push(letter)
+    end
+end
+
+def render_word(word, guessed_letters)
+    render = word.split('').map do |l|
+        next l if !is_letter(l) 
+            
+        if guessed_letters.include?(l) 
+            next l
+        else next '_'
+        end
+    end
+  render.join('')
 end
 
 hangman
