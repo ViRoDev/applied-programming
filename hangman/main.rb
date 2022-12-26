@@ -20,8 +20,6 @@ end
 MAX_TRIES = 6
 def hangman
     word = select_word
-    puts word
-
     # Game state
     parts_of_hangman_drawn = 0
     guessed_letters = []
@@ -46,8 +44,8 @@ def hangman
             end
         end
 
-        letter = gets.chomp
-        if letter == word 
+        input = gets.chomp
+        if input == word 
             puts "YEAH! YOU WON!\nTry again? (y/n)"
             answ = gets.chomp.downcase[0]
             if answ == 'y' 
@@ -60,11 +58,11 @@ def hangman
                 break
             end
         end 
-        if (!word.include?(letter)) 
+        if (!word.include?(input)) 
             parts_of_hangman_drawn = parts_of_hangman_drawn + 1
             puts "There is no such letter in this word"
         end        
-        guessed_letters.push(letter)
+        guessed_letters.push(input)
     end
 end
 
