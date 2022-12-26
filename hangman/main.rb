@@ -40,12 +40,26 @@ def hangman
                 word = select_word
                 guessed_letters = []
                 parts_of_hangman_drawn = 0
+                next
             else
                 break
             end
         end
 
         letter = gets.chomp
+        if letter == word 
+            puts "YEAH! YOU WON!\nTry again? (y/n)"
+            answ = gets.chomp.downcase[0]
+            if answ == 'y' 
+                # re-initializing game state
+                word = select_word
+                guessed_letters = []
+                parts_of_hangman_drawn = 0
+                next
+            else
+                break
+            end
+        end 
         if (!word.include?(letter)) 
             parts_of_hangman_drawn = parts_of_hangman_drawn + 1
             puts "There is no such letter in this word"
@@ -55,13 +69,16 @@ def hangman
 end
 
 def render_hangman(wrong_answers)
-        rope = '|' if wrong_answers > 0
-        head = 'o' if wrong_answers > 1
-        torso = '()' if wrong_answers > 2
-        r_hand = '/' if wrong_answers > 3 
-        l_hand = '\\' if wrong_answers > 4
-        r_leg = '/' if wrong_answers > 5
-        l_leg = '\\' if wrong_answers > 6
+    # Sadly, no 'falling down' switch-like statement in ruby exists
+    # 'case' applies only the first check
+    rope = '|' if wrong_answers > 0
+    head = 'o' if wrong_answers > 1
+    torso = '()' if wrong_answers > 2
+    r_hand = '/' if wrong_answers > 3 
+    l_hand = '\\' if wrong_answers > 4
+    r_leg = '/' if wrong_answers > 5
+    l_leg = '\\' if wrong_answers > 6
+
     hangman = "
     ------
     |   #{rope}
