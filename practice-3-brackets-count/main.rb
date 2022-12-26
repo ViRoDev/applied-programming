@@ -6,7 +6,7 @@ open_curly_brackets = 0
 while true 
     # User Input
     begin
-        puts 'Enter first bracket symbol or exit:'
+        puts 'Enter *one* bracket symbol or exit:'
 
         user_str = STDIN.gets.gsub(/\s+/, '')
         break if user_str == 'exit'
@@ -45,4 +45,3 @@ while true
 end
 puts 'Ending program before switch...'
 
-def brackets_calculator ()
