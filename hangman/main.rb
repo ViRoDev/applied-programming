@@ -17,6 +17,7 @@ def is_letter(symbol)
    symbol.downcase.match(/[a-z]/)
 end
 
+MAX_TRIES = 6
 def hangman
     word = select_word
     puts word
@@ -25,14 +26,30 @@ def hangman
     parts_of_hangman_drawn = 0
     guessed_letters = []
 
+    # Game loop
     loop do
         puts render_word(word, guessed_letters)
         puts render_hangman(parts_of_hangman_drawn)
+
+        #Checking game state for game over
+        if parts_of_hangman_drawn > MAX_TRIES
+            puts "GAME OVER!\nThe word was: #{word}\nTry again? (y/n)"
+            answ = gets.chomp.downcase[0]
+            if answ == 'y' 
+                # re-initializing game state
+                word = select_word
+                guessed_letters = []
+                parts_of_hangman_drawn = 0
+            else
+                break
+            end
+        end
+
         letter = gets.chomp
         if (!word.include?(letter)) 
             parts_of_hangman_drawn = parts_of_hangman_drawn + 1
             puts "There is no such letter in this word"
-        end
+        end        
         guessed_letters.push(letter)
     end
 end
