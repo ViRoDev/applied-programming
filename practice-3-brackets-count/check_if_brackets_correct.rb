@@ -19,8 +19,6 @@ def find_close_bracket_index(string)
   return nil
 end
 
-puts find_close_bracket_index('(())')
-
 def check_if_brackets_correct(string)
   first_symbol = string.split('').at(0)
   return true if first_symbol == nil
