@@ -9,17 +9,20 @@ text = "In a#village234 of La Mancha,\
  lentils on Fridays, and a pigeon or so extra on Sundays, \
  made away with three-quarters of his income."
 
-all_words = text.downcase
-                .gsub(/[^(a-z)\s']/, ' ')
-                .split(/\s/)
-                .filter { |str| !str.empty? }
-hash = {}
-all_words.each do |word|
-  hash[word] = hash[word] ? hash[word] + 1 : 1
+def find_top_three_words(text)
+  all_words = text.downcase
+                  .gsub(/[^(a-z)\s']/, ' ')
+                  .split(/\s/)
+                  .filter { |str| !str.empty? }
+  hash = {}
+  all_words.each do |word|
+    hash[word] = hash[word] ? hash[word] + 1 : 1
+  end
+
+  sorted = hash.sort { |a, b| b[1] <=> a[1] }
+
+  top_three = sorted[0..2].map {|el| el[0]}
+  return top_three
 end
 
-sorted = hash.sort { |a, b| b[1] <=> a[1] }
-
-[0, 1, 2].each do |idx|
-  print "NUMBER##{idx + 1} WORD IS... #{sorted[idx][0]}!\n"
-end
+puts find_top_three_words(text)
