@@ -1,62 +1,45 @@
-def check_if_brackets_correct(string)
-  open_round_brackets = 0
-  open_square_brackets = 0
-  open_curly_brackets = 0
+BRACKETS = Hash['(' => ')', '[' => ']', '{' => '}']
+def find_close_bracket_index(string)
+  opened = string.split('').at(0)
+  closed = BRACKETS[opened]
+  return nil if closed == nil
+  num_of_opened = 0
 
-  string.split('').each do |symbol|
-    case symbol
-      when '('
-        open_round_brackets+=1
-      when ')'
-        open_round_brackets-=1
-       when '['
-        open_square_brackets+=1
-      when ']'
-        open_square_brackets-=1
-      when '{'
-        open_curly_brackets+=1
-      when '}'
-        open_curly_brackets-=1
-    else 
-        # should not be possible to raise, but what if...
-        raise "Symbol #{symbol} not supported"
+  string.split('').each.with_index do |br, idx|
+    if br == opened
+      num_of_opened = num_of_opened + 1
     end
 
-    return false  if open_curly_brackets < 0 || open_round_brackets < 0  || open_square_brackets < 0
+    if br == closed
+      num_of_opened = num_of_opened - 1
+
+      return idx if num_of_opened == 0
+    end
+  end
+  return nil
+end
+
+puts find_close_bracket_index('(())')
+
+def check_if_brackets_correct(string)
+  first_symbol = string.split('').at(0)
+  return true if first_symbol == nil
+
+  closed_idx = find_close_bracket_index(string)
+  return false if closed_idx == nil
+
+  if closed_idx == 1 
+    inside_correct = true
+  else
+    inside = 1..(closed_idx-1)
+    inside_str = string[inside]
+    inside_correct = check_if_brackets_correct(inside_str)
   end
 
-  return true if open_curly_brackets == 0 && open_round_brackets == 0 && open_square_brackets == 0
+  outside = (closed_idx+1)..(string.length - 1)
+  outside_str = string[outside].strip
+  ouside_correct = check_if_brackets_correct(outside_str)
 
-  return false 
+  return inside_correct && ouside_correct
 end
 
-require 'test/unit'
-class TestBrackets < Test::Unit::TestCase
-    def test_one_pair_square
-        assert_equal true, check_if_brackets_correct('[]')
-    end
-    
-    def test_one_pair_curly
-        assert_equal true, check_if_brackets_correct('{}')
-    end
-
-    def test_one_pair_round
-        assert_equal true, check_if_brackets_correct('()')
-    end
-
-    def test_equal
-        assert_equal true, check_if_brackets_correct('({})')
-        assert_equal true, check_if_brackets_correct('{[()]}')
-        assert_equal true, check_if_brackets_correct('[{}(())]')
-    end
-
-    def test_not_closed
-        assert_equal false, check_if_brackets_correct('[[')
-        assert_equal false, check_if_brackets_correct('[[]')
-    end
-
-    def test_not_opened
-        assert_equal false, check_if_brackets_correct('[]{)}')
-        assert_equal false, check_if_brackets_correct('){}{}')
-    end
-end
